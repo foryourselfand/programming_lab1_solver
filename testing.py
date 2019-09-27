@@ -6,7 +6,7 @@ from sys import argv
 
 
 def get_config_info() -> Tuple[str, str]:
-    with open("config.txt") as file:
+    with open("info/config.txt") as file:
         first_param: str = file.readline().replace('\n', '').split(': ')[1]
         second_param: str = file.readline().split(': ')[1]
         return first_param, second_param
