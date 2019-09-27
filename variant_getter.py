@@ -30,9 +30,9 @@ class PickleIO:
             pickle.dump(obj, file)
 
 
-class RequestPageGetter(AbstractPageGetter):
+class RequestPageGetter(AbstractPageGetter, PickleIO):
     def __init__(self):
-        self.pickle_io = PickleIO()
+        super().__init__()
         self.config_info: Tuple[str, str] = self.get_config_info()
 
     @staticmethod
@@ -64,30 +64,26 @@ class RequestPageGetter(AbstractPageGetter):
         response = requests.post('https://se.ifmo.ru/courses/programming', params=params, cookies=cookies, data=data)
         page = response.content
 
-        self.pickle_io.dump(page, variant)
+        self.dump(page, variant)
 
         return page
 
 
-class PicklePageGetter(AbstractPageGetter):
-    def __init__(self):
-        super().__init__()
-        self.pickle_io = PickleIO()
-
+class PicklePageGetter(AbstractPageGetter, PickleIO):
     def get_page(self, variant) -> bytes:
-        page = self.pickle_io.load(variant)
+        page = self.load(variant)
         return page
 
 
-class VariantGetter:
+class VariantGetter(PickleIO):
     def __init__(self):
-        self.pickle_io = PickleIO('info')
+        super().__init__('info')
         self.remembered_variants: Set[int] = self.load_remembered_variants()
         self.page_getters: Dict[int, AbstractPageGetter] = {False: RequestPageGetter(),
                                                             True: PicklePageGetter()}
 
     def load_remembered_variants(self) -> Set[int]:
-        data = self.pickle_io.load('remembered_variants')
+        data = self.load('remembered_variants')
         return data
 
     def get_variant_soup(self, variant: int = 698) -> BeautifulSoup:
@@ -100,7 +96,7 @@ class VariantGetter:
         return soup
 
     def dump_remembered_variants(self):
-        self.pickle_io.dump(self.remembered_variants, 'remembered_variants')
+        self.dump(self.remembered_variants, 'remembered_variants')
 
 
 def main():
