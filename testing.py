@@ -11,13 +11,6 @@ def get_config_info() -> Tuple[str, str]:
         second_param: str = file.readline().split(': ')[1]
         return first_param, second_param
 
-        # data = []
-        # for line in file.readlines():
-        #     line = line.replace("\n", '')
-        #     split_line = line.split(": ")
-        #     data.append(split_line)
-        # return data
-
 
 def get_soup(config_info: Tuple[str, str]):
     cookies = {
@@ -42,6 +35,7 @@ def get_soup(config_info: Tuple[str, str]):
 
     response = requests.post('https://se.ifmo.ru/courses/programming', params=params, cookies=cookies, data=data)
     page = response.content
+    print(type(page))
     soup = BeautifulSoup(page, "html.parser", from_encoding='utf-8')
 
     return soup
