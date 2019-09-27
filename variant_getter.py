@@ -102,7 +102,7 @@ class VariantGetter(PickleIO):
 def main():
     variant_getter = VariantGetter()
 
-    soup: BeautifulSoup = variant_getter.get_variant_soup(698)
+    soup: BeautifulSoup = variant_getter.get_variant_soup(24092000)
     print(soup.prettify())
 
     variant_getter.dump_remembered_variants()

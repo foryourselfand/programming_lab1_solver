@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
+import re
+from task_inputs import TaskInputsCreator
+from variant_getter import VariantGetter
 
 
 class TaskWriter:
@@ -12,10 +15,10 @@ class TaskWriter:
         addition_formatter = AdditionsFormatter()
         self.addition = addition_formatter.get_addition(task_inputs)
 
-    def write_task(self):
+    def write_task(self, variant):
         final = self.basic % self.addition
         print(final)
-        with open('tasks/test.java', 'w') as file:
+        with open(f'tasks/{variant}.java', 'w') as file:
             file.write(final)
 
 
@@ -48,6 +51,25 @@ class AbstractTaskFormatter(ABC):
 
 class FirstTaskFormatter(AbstractTaskFormatter):
     def get_formatted_task(self, inputs) -> str:
+        print(inputs)
+
+        split_input = inputs.split(' ')
+        print(split_input)
+
+        array_name = split_input[3]
+        array_type = split_input[5][:-1]
+        print(array_name, array_type)
+
+        even_flag = 'чётными' in split_input
+        odd_flag = 'нечётными' in split_input
+        print(even_flag, odd_flag)
+
+        numbers = re.findall(r'\d+', inputs)
+        print(*numbers)
+
+        order = split_input[-1][:-1]
+        print(order)
+
         return '11\n12'
 
 
@@ -62,9 +84,17 @@ class ThirdTaskFormatter(AbstractTaskFormatter):
 
 
 def main():
-    inputs = [str(i) for i in range(3)]
-    task_writer = TaskWriter(inputs)
-    task_writer.write_task()
+    variant = 4
+
+    variant_getter = VariantGetter()
+
+    task_inputs_creator = TaskInputsCreator(variant_getter)
+    input_tasks = task_inputs_creator.get_task_inputs(variant)
+
+    task_writer = TaskWriter(input_tasks)
+    # task_writer.write_task(variant)
+
+    variant_getter.dump_remembered_variants()
 
 
 if __name__ == '__main__':
