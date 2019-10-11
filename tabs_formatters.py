@@ -68,16 +68,12 @@ class CaseFormatter(TabFormatter):
         return '\tbreak;'
 
 
-if __name__ == '__main__':
+def main():
     public_class_main = ClassicFormatter('public class Main')
 
     psvm = ClassicFormatter('public static void main(String[] args)')
-    psvm.add_line('short[] b = new short[14]')
+    psvm.add_line('short[] b = {18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5}')
     public_class_main.add_child(psvm)
-
-    first_for = ShortFormatter('for (short i = 0, j = 18; i < b.length; i++, j--)')
-    first_for.add_line('b[i] = j')
-    psvm.add_child(first_for)
 
     psvm.add_line('double[] x = new double[20]')
     second_for = ShortFormatter('for (int i = 0; i < x.length; i++)')
@@ -116,3 +112,7 @@ if __name__ == '__main__':
 
     for line in result:
         print(line, end='')
+
+
+if __name__ == '__main__':
+    main()

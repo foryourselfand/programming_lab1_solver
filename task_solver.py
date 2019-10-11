@@ -4,26 +4,53 @@ import re
 from task_inputs import TaskInputsCreator
 from variant_getter import VariantGetter
 from tabs_formatters import *
+from os import path, makedirs
 
 
 class TaskWriter:
-    def write_task(self, inputs: List[str], variant):
+    def write_task(self, task_inputs: List[str], variant):
         public_class_main = ClassicFormatter('public class Main')
 
         psvm = ClassicFormatter('public static void main(String[] args)')
+        public_class_main.add_child(psvm)
 
-        with open(f'tasks/{variant}.java', 'w') as file:
-            file.write(result_str)
+        task_formatters = [FirstTaskFormatter(), SecondTaskFormatter(), ThirdTaskFormatter()]
+        for task_formatter, task_input in zip(task_formatters, task_inputs):
+            task_formatter.format_task(task_input, psvm)
+
+        result = public_class_main.get_result()
+
+        base_dir = f'tasks/{variant}'
+        if not path.exists(base_dir):
+            makedirs(base_dir)
+
+        file_name = f'{base_dir}/Main.java'
+        with open(file_name, 'w') as file:
+            file.writelines(result)
 
 
 class AbstractTaskFormatter(ABC):
     @abstractmethod
-    def get_formatted_task(self, inputs) -> str:
+    def format_task(self, inputs: str, block: TabFormatter):
         pass
+
+    def create_array(self, arr_type: str, arr_name: str, arr_size: Union[int, List[int]]) -> str:
+        if type(arr_size) == int:
+            arr_size = [arr_size]
+        first_brackets = '[]' * len(arr_size)
+        first_part = f'{arr_type}{first_brackets} {arr_name}'
+
+        second_brackets: str = ''
+        for size in arr_size:
+            second_brackets += f'[{size}]'
+        second_part = f'new {arr_type}{second_brackets}'
+
+        result = f'{first_part} = {second_part};'
+        return result
 
 
 class FirstTaskFormatter(AbstractTaskFormatter):
-    def get_formatted_task(self, inputs) -> str:
+    def format_task(self, inputs, block):
         print(inputs)
 
         split_input = inputs.split(' ')
@@ -47,43 +74,58 @@ class FirstTaskFormatter(AbstractTaskFormatter):
         array_creation = self.create_array(arr_type, arr_name, arr_size)
         print(array_creation)
 
-        return '11\n12'
-
-    def create_array(self, arr_type: str, arr_name: str, arr_size: Union[int, List[int]]) -> str:
-        if type(arr_size) == int:
-            arr_size = [arr_size]
-        first_brackets = '[]' * len(arr_size)
-        first_part = f'{arr_type}{first_brackets} {arr_name}'
-
-        second_brackets: str = ''
-        for size in arr_size:
-            second_brackets += f'[{size}]'
-        second_part = f'new {arr_type}{second_brackets}'
-
-        result = f'{first_part} = {second_part};'
-        return result
+        block.add_line('short[] b = {18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5}')
 
 
 class SecondTaskFormatter(AbstractTaskFormatter):
-    def get_formatted_task(self, inputs) -> str:
-        return '21\n22'
+    def format_task(self, inputs, block):
+        block.add_line('double[] x = new double[20]')
+        second_for = ShortFormatter('for (int i = 0; i < x.length; i++)')
+        second_for.add_line('x[i] = Math.random() * 16.0 - 12.0')
+        block.add_child(second_for)
 
 
 class ThirdTaskFormatter(AbstractTaskFormatter):
-    def get_formatted_task(self, inputs) -> str:
-        return '31\n32'
+    def format_task(self, inputs, block):
+        block.add_line('double[][] d = new double[14][20]')
+        third_for_outer = ClassicFormatter('for (int i = 0; i < d.length; i++)')
+        third_for_inner = ClassicFormatter('for (int j = 0; j < d[i].length; j++)')
+        third_for_outer.add_child(third_for_inner)
+        block.add_child(third_for_outer)
+
+        switch = ClassicFormatter('switch ((int) b[i])')
+        third_for_inner.add_child(switch)
+
+        first_case = CaseFormatter('case 7')
+        first_case.add_line('d[i][j] = Math.asin(Math.pow(Math.E, Math.cbrt(- Math.pow(Math.sin(x[j]), 2))))')
+        switch.add_child(first_case)
+
+        for number in [5, 6, 8, 9, 15, 16]:
+            switch.add_line(f'case {number}', end=':')
+
+        second_case = CaseFormatter('case 17')
+        second_case.add_line('d[i][j] = Math.sin(Math.pow(3 * (Math.cos(x[j]) - 1), Math.pow(3 * x[j], 3)))')
+        switch.add_child(second_case)
+
+        default_case = CaseFormatter('default')
+        default_case.add_line('d[i][j] = Math.pow(Math.E, Math.pow(Math.E, 4 * ((1 / 2) + x[j])))')
+        switch.add_child(default_case)
+
+        third_for_inner.add_line('System.out.printf("%.3f ", d[i][j])')
+
+        third_for_outer.add_line('System.out.println()')
 
 
 def main():
-    variant = 4
+    variant = 698
 
     variant_getter = VariantGetter()
 
     task_inputs_creator = TaskInputsCreator(variant_getter)
     input_tasks = task_inputs_creator.get_task_inputs(variant)
 
-    task_writer = TaskWriter(input_tasks)
-    # task_writer.write_task(variant)
+    task_writer = TaskWriter()
+    task_writer.write_task(input_tasks, variant)
 
     variant_getter.dump_remembered_variants()
 
