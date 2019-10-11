@@ -3,44 +3,17 @@ from typing import List, Union
 import re
 from task_inputs import TaskInputsCreator
 from variant_getter import VariantGetter
+from tabs_formatters import *
 
 
 class TaskWriter:
-    def __init__(self, task_inputs: List[str]):
-        self.basic = """public class Main {
-    public static void main(String[] args) {
-%s
-    }
-}"""
-        addition_formatter = AdditionsFormatter()
-        self.addition = addition_formatter.get_addition(task_inputs)
+    def write_task(self, inputs: List[str], variant):
+        public_class_main = ClassicFormatter('public class Main')
 
-    def write_task(self, variant):
-        final = self.basic % self.addition
-        print(final)
+        psvm = ClassicFormatter('public static void main(String[] args)')
+
         with open(f'tasks/{variant}.java', 'w') as file:
-            file.write(final)
-
-
-class AdditionsFormatter:
-    def get_addition(self, task_inputs: List[str]):
-        additions: List[str] = list()
-
-        task_formatters = [FirstTaskFormatter(), SecondTaskFormatter(), ThirdTaskFormatter()]
-
-        for task_formatter, task_input in zip(task_formatters, task_inputs):
-            raw_formatted_task = task_formatter.get_formatted_task(task_input)
-            tab_formatted_task = list()
-
-            for raw_line in raw_formatted_task.split('\n'):
-                tab_line = f'\t\t{raw_line}'
-                tab_formatted_task.append(tab_line)
-
-            formatted_task = '\n'.join(tab_formatted_task)
-            additions.append(formatted_task)
-
-        addition_str = '\n\n'.join(additions)
-        return addition_str
+            file.write(result_str)
 
 
 class AbstractTaskFormatter(ABC):
