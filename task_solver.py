@@ -17,7 +17,6 @@ class TaskWriter:
         task_formatters = [FirstTaskFormatter(), SecondTaskFormatter(), ThirdTaskFormatter()]
         for task_formatter, task_input in zip(task_formatters, task_inputs):
             task_formatter.format_task(task_input, psvm)
-            psvm.add('', end='')
 
         result = public_class_main.get_result()
 
@@ -47,46 +46,37 @@ class AbstractTaskFormatter(ABC):
         right_part = f'new {arr_type}{brackets}'
         return right_part
 
-    def arr_creation(self, arr_type: str, arr_name: str, *arr_sizes: int) -> str:
+    def arr_creation(self, arr_type: str, arr_name: str, *arr_sizes: str) -> str:
         left_part = self.arr_creation_left_part(arr_type, arr_name, *arr_sizes)
         right_part = self.arr_creation_right_part(arr_type, arr_name, *arr_sizes)
-        result = f'{left_part} = {right_part};'
+        result = f'{left_part} = {right_part}'
         return result
+
+    def cycle_creation(self, arr_name: str, iter_name: str = 'i'):
+        return 'for (int {iter_name} = 0; {iter_name} < {arr_name}.length; {iter_name}++)'.format(iter_name=iter_name,
+                                                                                                  arr_name=arr_name)
 
 
 class FirstTaskFormatter(AbstractTaskFormatter):
     def format_task(self, inputs, block):
         split_input = inputs.split(' ')
-        print("inputs:", inputs)
-        print("split_input:", split_input)
-        print()
 
         arr_name = split_input[3]
         arr_type = split_input[5][:-1]
-        print("arr_name:", arr_name)
-        print("arr_type:", arr_type)
-        print()
 
         even_flag = 'чётными' in split_input
         odd_flag = 'нечётными' in split_input
-        print('even_flag:', even_flag)
-        print('odd_flag:', odd_flag)
-        print()
 
         start_number, end_number = map(int, re.findall(r'\d+', inputs))
-        print('start_number:', start_number)
-        print('end_number:', end_number)
-        print()
 
         order = split_input[-1][:-1]
-        print('order:', order)
 
         left_part = self.arr_creation_left_part(arr_type, arr_name, 1)
-        right_part = self.arr_raw_fill(start_number, end_number, False, False, order)
+        right_part = self.arr_raw_fill(start_number, end_number, even_flag, odd_flag, order)
         full_part = f'{left_part} = {right_part}'
-        print('full_part:', full_part)
 
         block.add(full_part)
+        block.add('', end='')
 
     def arr_raw_fill(self, start_number: int, end_number: int, even_flag: bool, odd_flag: bool, order: str) -> str:
         step = 1
@@ -109,10 +99,62 @@ class FirstTaskFormatter(AbstractTaskFormatter):
 
 class SecondTaskFormatter(AbstractTaskFormatter):
     def format_task(self, inputs, block):
-        block.add('double[] x = new double[20]')
-        second_for = ShortFormatter('for (int i = 0; i < x.length; i++)')
-        second_for.add('x[i] = Math.random() * 16.0 - 12.0')
-        block.add(second_for)
+        split_input = inputs.split(' ')
+        print('inputs:', inputs)
+        print('split_input:', split_input)
+
+        arr_name = split_input[3]
+        arr_type = split_input[5][:-1]
+        print('arr_name:', arr_name)
+        print('arr_type:', arr_type)
+
+        arr_size = split_input[8][:-2]
+        print('arr_size:', arr_size)
+
+        start_number = float(split_input[-3][1:])
+        end_number = float(split_input[-1][:-1])
+        print('start_number:', start_number)
+        print('end_number:', end_number)
+
+        array_creation = self.arr_creation(arr_type, arr_name, arr_size)
+        print('array_creation:', array_creation)
+
+        cycle_creation = self.cycle_creation(arr_name)
+        print('cycle_creation:', cycle_creation)
+
+        random_value = self.get_random_value(start_number, end_number)
+        print('random_value:', random_value)
+
+        random_value_with_right_cast = self.get_random_value_with_right_cast(arr_type, random_value)
+        print('random_value_with_right_cast:', random_value_with_right_cast)
+
+        random_arr_filling = self.get_random_arr_filling(arr_name, random_value_with_right_cast)
+        print('random_arr_filling:', random_arr_filling)
+
+        block.add(array_creation)
+        for_block = ShortFormatter(cycle_creation)
+        for_block.add(random_arr_filling)
+        block.add(for_block)
+        block.add('', end='')
+
+    def get_random_value(self, start_number, end_number) -> str:
+        multiplied = start_number + end_number
+        random_value = f'Math.random() * {multiplied} - {start_number}'
+        return random_value
+
+    def get_random_value_with_right_cast(self, arr_type: str, random_value: str) -> str:
+        left_part = ''
+        right_part = ''
+        if arr_type != 'double':
+            left_part = f'({arr_type}) ('
+            right_part = ')'
+        result = f'{left_part}{random_value}{right_part}'
+        return result
+
+    def get_random_arr_filling(self, arr_name: str, random_value, iter_name: str = 'i'):
+        left_part = f'{arr_name}[{iter_name}]'
+        result = f'{left_part} = {random_value}'
+        return result
 
 
 class ThirdTaskFormatter(AbstractTaskFormatter):
@@ -147,7 +189,7 @@ class ThirdTaskFormatter(AbstractTaskFormatter):
 
 
 def main():
-    variant = 698
+    variant = 24092000
 
     variant_getter = VariantGetter()
 

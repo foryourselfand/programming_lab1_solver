@@ -1,10 +1,10 @@
 public class Main {
 	public static void main(String[] args) {
-		short[] d = {18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5};
+		long[] b = {6, 8, 10, 12, 14, 16, 18, 20, 22};
 		
-		double[] x = new double[20];
+		double[] x = new double[16];
 		for (int i = 0; i < x.length; i++)
-			x[i] = Math.random() * 16.0 - 12.0;
+			x[i] = Math.random() * 15.0 - 13.0;
 				
 		double[][] d = new double[14][20];
 		for (int i = 0; i < d.length; i++) {
