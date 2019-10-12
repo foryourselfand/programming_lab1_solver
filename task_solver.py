@@ -12,11 +12,12 @@ class TaskWriter:
         public_class_main = ClassicFormatter('public class Main')
 
         psvm = ClassicFormatter('public static void main(String[] args)')
-        public_class_main.add_child(psvm)
+        public_class_main.add(psvm)
 
         task_formatters = [FirstTaskFormatter(), SecondTaskFormatter(), ThirdTaskFormatter()]
         for task_formatter, task_input in zip(task_formatters, task_inputs):
             task_formatter.format_task(task_input, psvm)
+            psvm.add('', end='')
 
         result = public_class_main.get_result()
 
@@ -74,46 +75,46 @@ class FirstTaskFormatter(AbstractTaskFormatter):
         array_creation = self.create_array(arr_type, arr_name, arr_size)
         print(array_creation)
 
-        block.add_line('short[] b = {18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5}')
+        block.add('short[] b = {18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5}')
 
 
 class SecondTaskFormatter(AbstractTaskFormatter):
     def format_task(self, inputs, block):
-        block.add_line('double[] x = new double[20]')
+        block.add('double[] x = new double[20]')
         second_for = ShortFormatter('for (int i = 0; i < x.length; i++)')
-        second_for.add_line('x[i] = Math.random() * 16.0 - 12.0')
-        block.add_child(second_for)
+        second_for.add('x[i] = Math.random() * 16.0 - 12.0')
+        block.add(second_for)
 
 
 class ThirdTaskFormatter(AbstractTaskFormatter):
     def format_task(self, inputs, block):
-        block.add_line('double[][] d = new double[14][20]')
+        block.add('double[][] d = new double[14][20]')
         third_for_outer = ClassicFormatter('for (int i = 0; i < d.length; i++)')
         third_for_inner = ClassicFormatter('for (int j = 0; j < d[i].length; j++)')
-        third_for_outer.add_child(third_for_inner)
-        block.add_child(third_for_outer)
+        third_for_outer.add(third_for_inner)
+        block.add(third_for_outer)
 
         switch = ClassicFormatter('switch ((int) b[i])')
-        third_for_inner.add_child(switch)
+        third_for_inner.add(switch)
 
         first_case = CaseFormatter('case 7')
-        first_case.add_line('d[i][j] = Math.asin(Math.pow(Math.E, Math.cbrt(- Math.pow(Math.sin(x[j]), 2))))')
-        switch.add_child(first_case)
+        first_case.add('d[i][j] = Math.asin(Math.pow(Math.E, Math.cbrt(- Math.pow(Math.sin(x[j]), 2))))')
+        switch.add(first_case)
 
         for number in [5, 6, 8, 9, 15, 16]:
-            switch.add_line(f'case {number}', end=':')
+            switch.add(f'case {number}', end=':')
 
         second_case = CaseFormatter('case 17')
-        second_case.add_line('d[i][j] = Math.sin(Math.pow(3 * (Math.cos(x[j]) - 1), Math.pow(3 * x[j], 3)))')
-        switch.add_child(second_case)
+        second_case.add('d[i][j] = Math.sin(Math.pow(3 * (Math.cos(x[j]) - 1), Math.pow(3 * x[j], 3)))')
+        switch.add(second_case)
 
         default_case = CaseFormatter('default')
-        default_case.add_line('d[i][j] = Math.pow(Math.E, Math.pow(Math.E, 4 * ((1 / 2) + x[j])))')
-        switch.add_child(default_case)
+        default_case.add('d[i][j] = Math.pow(Math.E, Math.pow(Math.E, 4 * ((1 / 2) + x[j])))')
+        switch.add(default_case)
 
-        third_for_inner.add_line('System.out.printf("%.3f ", d[i][j])')
+        third_for_inner.add('System.out.printf("%.3f ", d[i][j])')
 
-        third_for_outer.add_line('System.out.println()')
+        third_for_outer.add('System.out.println()')
 
 
 def main():
