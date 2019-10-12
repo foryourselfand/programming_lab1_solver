@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from pprint import pprint
 from typing import List, Union
 import re
 from task_inputs import TaskInputsCreator
@@ -100,36 +101,24 @@ class FirstTaskFormatter(AbstractTaskFormatter):
 class SecondTaskFormatter(AbstractTaskFormatter):
     def format_task(self, inputs, block):
         split_input = inputs.split(' ')
-        print('inputs:', inputs)
-        print('split_input:', split_input)
 
         arr_name = split_input[3]
         arr_type = split_input[5][:-1]
-        print('arr_name:', arr_name)
-        print('arr_type:', arr_type)
 
         arr_size = split_input[8][:-2]
-        print('arr_size:', arr_size)
 
         start_number = float(split_input[-3][1:])
         end_number = float(split_input[-1][:-1])
-        print('start_number:', start_number)
-        print('end_number:', end_number)
 
         array_creation = self.arr_creation(arr_type, arr_name, arr_size)
-        print('array_creation:', array_creation)
 
         cycle_creation = self.cycle_creation(arr_name)
-        print('cycle_creation:', cycle_creation)
 
         random_value = self.get_random_value(start_number, end_number)
-        print('random_value:', random_value)
 
         random_value_with_right_cast = self.get_random_value_with_right_cast(arr_type, random_value)
-        print('random_value_with_right_cast:', random_value_with_right_cast)
 
         random_arr_filling = self.get_random_arr_filling(arr_name, random_value_with_right_cast)
-        print('random_arr_filling:', random_arr_filling)
 
         block.add(array_creation)
         for_block = ShortFormatter(cycle_creation)
@@ -159,29 +148,105 @@ class SecondTaskFormatter(AbstractTaskFormatter):
 
 class ThirdTaskFormatter(AbstractTaskFormatter):
     def format_task(self, inputs, block):
+        inputs_arr = inputs.split('\n')
+        # for elem in inputs_arr:
+        #     print(elem)
+
+        zero_line = inputs_arr[0]
+
+        split_first_line = zero_line.split(' ')
+
+        arr_name = split_first_line[3]
+        arr_type = 'double'
+
+        arr_sizes = split_first_line[5][:-1].split('x')
+
+        created_array = self.arr_creation(arr_type, arr_name, *arr_sizes)
+        print('created_array:', created_array)
+
+        outer_cycle = self.cycle_creation(arr_name)
+        print('outer_cycle:', outer_cycle)
+
+        arr_name_inner_cycle = f'{arr_name}[i]'
+        inner_cycle = self.cycle_creation(arr_name_inner_cycle, 'j')
+        print('inner_cycle:', inner_cycle)
+        print()
+
+        first_line = inputs_arr[1]
+        print('first_line:', first_line)
+
+        first_formula_split = first_line.split('`')
+
+        first_formula_before = first_formula_split[0].split(' ')
+
+        checked_arr_name = first_formula_before[2][0]
+        print('checked_arr_name:', checked_arr_name)
+
+        first_checked_value = first_formula_before[4][:-1]
+        print('first_checked_value:', first_checked_value)
+
+        first_arr_fill = first_formula_split[1]
+        print('first_arr_fill:', first_arr_fill)
+        print()
+
+        second_line = inputs_arr[2]
+        print('second_line:', second_line)
+
+        second_formula_split = second_line.split('`')
+
+        second_formula_before = second_formula_split[0]
+
+        second_in_brackets = second_formula_before.split('{')[1].split('}')[0]
+
+        numbers_in_brackets = second_in_brackets.split(', ')
+
+        numbers_in_brackets_first = numbers_in_brackets[:-1]
+        print('numbers_in_brackets_first:', numbers_in_brackets_first)
+
+        number_in_brackets_last = numbers_in_brackets[-1]
+        print('number_in_brackets_last:', number_in_brackets_last)
+
+        second_arr_fill = second_formula_split[1]
+        print('second_arr_fill:', second_arr_fill)
+        print()
+
+        third_line = inputs_arr[3]
+        print('third_line:', third_line)
+        third_formula_split = third_line.split('`')
+        third_arr_fill = third_formula_split[1]
+        print('third_arr_fill:', third_arr_fill)
+        print()
+
+        last_line = inputs_arr[4]
+        print('last_line:', last_line)
+        last_line_split = last_line.split(' ')
+
+        comma_raw_number = last_line_split[8]
+        print('comma_raw_number:', comma_raw_number)
+
         block.add('double[][] d = new double[14][20]')
         third_for_outer = ClassicFormatter('for (int i = 0; i < d.length; i++)')
         third_for_inner = ClassicFormatter('for (int j = 0; j < d[i].length; j++)')
         third_for_outer.add(third_for_inner)
         block.add(third_for_outer)
 
-        switch = ClassicFormatter('switch ((int) b[i])')
-        third_for_inner.add(switch)
+        switch_block = ClassicFormatter('switch ((int) b[i])')
+        third_for_inner.add(switch_block)
 
         first_case = CaseFormatter('case 7')
         first_case.add('d[i][j] = Math.asin(Math.pow(Math.E, Math.cbrt(- Math.pow(Math.sin(x[j]), 2))))')
-        switch.add(first_case)
+        switch_block.add(first_case)
 
         for number in [5, 6, 8, 9, 15, 16]:
-            switch.add(f'case {number}', end=':')
+            switch_block.add(f'case {number}', end=':')
 
         second_case = CaseFormatter('case 17')
         second_case.add('d[i][j] = Math.sin(Math.pow(3 * (Math.cos(x[j]) - 1), Math.pow(3 * x[j], 3)))')
-        switch.add(second_case)
+        switch_block.add(second_case)
 
         default_case = CaseFormatter('default')
         default_case.add('d[i][j] = Math.pow(Math.E, Math.pow(Math.E, 4 * ((1 / 2) + x[j])))')
-        switch.add(default_case)
+        switch_block.add(default_case)
 
         third_for_inner.add('System.out.printf("%.3f ", d[i][j])')
 
