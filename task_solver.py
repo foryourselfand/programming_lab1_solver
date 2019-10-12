@@ -35,47 +35,76 @@ class AbstractTaskFormatter(ABC):
     def format_task(self, inputs: str, block: TabFormatter):
         pass
 
-    def create_array(self, arr_type: str, arr_name: str, arr_size: Union[int, List[int]]) -> str:
-        if type(arr_size) == int:
-            arr_size = [arr_size]
-        first_brackets = '[]' * len(arr_size)
-        first_part = f'{arr_type}{first_brackets} {arr_name}'
+    def arr_creation_left_part(self, arr_type: str, arr_name: str, *arr_sizes: int) -> str:
+        brackets = '[]' * len(arr_sizes)
+        left_part = f'{arr_type}{brackets} {arr_name}'
+        return left_part
 
-        second_brackets: str = ''
-        for size in arr_size:
-            second_brackets += f'[{size}]'
-        second_part = f'new {arr_type}{second_brackets}'
+    def arr_creation_right_part(self, arr_type: str, arr_name: str, *arr_sizes: int) -> str:
+        brackets: str = ''
+        for size in arr_sizes:
+            brackets += f'[{size}]'
+        right_part = f'new {arr_type}{brackets}'
+        return right_part
 
-        result = f'{first_part} = {second_part};'
+    def arr_creation(self, arr_type: str, arr_name: str, *arr_sizes: int) -> str:
+        left_part = self.arr_creation_left_part(arr_type, arr_name, *arr_sizes)
+        right_part = self.arr_creation_right_part(arr_type, arr_name, *arr_sizes)
+        result = f'{left_part} = {right_part};'
         return result
 
 
 class FirstTaskFormatter(AbstractTaskFormatter):
     def format_task(self, inputs, block):
-        print(inputs)
-
         split_input = inputs.split(' ')
-        print(split_input)
+        print("inputs:", inputs)
+        print("split_input:", split_input)
+        print()
 
         arr_name = split_input[3]
         arr_type = split_input[5][:-1]
-        print(arr_name, arr_type)
+        print("arr_name:", arr_name)
+        print("arr_type:", arr_type)
+        print()
 
         even_flag = 'чётными' in split_input
         odd_flag = 'нечётными' in split_input
-        print(even_flag, odd_flag)
+        print('even_flag:', even_flag)
+        print('odd_flag:', odd_flag)
+        print()
 
-        numbers = re.findall(r'\d+', inputs)
-        print(*numbers)
+        start_number, end_number = map(int, re.findall(r'\d+', inputs))
+        print('start_number:', start_number)
+        print('end_number:', end_number)
+        print()
 
         order = split_input[-1][:-1]
-        print(order)
+        print('order:', order)
 
-        arr_size = 10
-        array_creation = self.create_array(arr_type, arr_name, arr_size)
-        print(array_creation)
+        left_part = self.arr_creation_left_part(arr_type, arr_name, 1)
+        right_part = self.arr_raw_fill(start_number, end_number, False, False, order)
+        full_part = f'{left_part} = {right_part}'
+        print('full_part:', full_part)
 
-        block.add('short[] b = {18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5}')
+        block.add(full_part)
+
+    def arr_raw_fill(self, start_number: int, end_number: int, even_flag: bool, odd_flag: bool, order: str) -> str:
+        step = 1
+        if even_flag or odd_flag:
+            step = 2
+
+            mod = 0 if even_flag else 1
+            start_number += abs(mod - (start_number % 2))
+            end_number -= abs(mod - (end_number % 2))
+
+        arr = [str(elem) for elem in range(start_number, end_number + 1, step)]
+
+        if order == 'убывания':
+            arr = arr[::-1]
+
+        numbers_with_dot = ', '.join(arr)
+        numbers_in_brackets = '{' + numbers_with_dot + '}'
+        return numbers_in_brackets
 
 
 class SecondTaskFormatter(AbstractTaskFormatter):

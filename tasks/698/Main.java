@@ -1,6 +1,6 @@
 public class Main {
 	public static void main(String[] args) {
-		short[] b = {18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5};
+		short[] d = {18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5};
 		
 		double[] x = new double[20];
 		for (int i = 0; i < x.length; i++)
