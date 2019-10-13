@@ -9,9 +9,9 @@ public class Main {
 		double[][] f = new double[14][20];
 		for (int i = 0; i < f.length; i++) {
 			for (int j = 0; j < f[i].length; j++) {
-				switch (d[i]) {
+				switch ((int) d[i]) {
 					case 7:
-						f[i][j] = arcsin(e^(root(3)(-sin^2(x))));
+						f[i][j] = Math.asin(Math.pow(Math.E, (Math.cbrt(-Math.pow(Math.sin(x[j]), 2)))));
 						break;
 					case 5:
 					case 6:
@@ -20,10 +20,10 @@ public class Main {
 					case 15:
 					case 16:
 					case 17:
-						f[i][j] = sin((3*(cos(x)-1))^((3*x)^3));
+						f[i][j] = Math.sin(Math.pow((3*(Math.cos(x[j])-1)), (Math.pow((3*x[j]), 3))));
 						break;
 					default:
-						f[i][j] = e^(e^(4*(1/2+x)))+1/2;
+						f[i][j] = Math.pow(Math.E, (Math.pow(Math.E, (4*(1/2+x[j])))))+1/2;
 						break;
 				}
 				System.out.printf("%.3f ", f[i][j]);
