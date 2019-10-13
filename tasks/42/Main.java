@@ -1,32 +1,33 @@
 public class Main {
 	public static void main(String[] args) {
-		int[] n = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
+		int[] k = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
 		
 		float[] x = new float[16];
 		for (int i = 0; i < x.length; i++)
 			x[i] = (float) (Math.random() * 11.0 - 9.0);
 				
-		double[][] d = new double[14][20];
-		for (int i = 0; i < d.length; i++) {
-			for (int j = 0; j < d[i].length; j++) {
-				switch ((int) b[i]) {
-					case 7:
-						d[i][j] = Math.asin(Math.pow(Math.E, Math.cbrt(- Math.pow(Math.sin(x[j]), 2))));
+		double[][] a = new double[17][16];
+		for (int i = 0; i < a.length; i++) {
+			for (int j = 0; j < a[i].length; j++) {
+				switch (k[i]) {
+					case 12:
+						a[i][j] = ((x/0.25)^(2*((x-1)/pi)^3)/2)^2;
 						break;
+					case 3:
+					case 4:
 					case 5:
-					case 6:
-					case 8:
-					case 9:
+					case 7:
+					case 10:
+					case 11:
+					case 13:
 					case 15:
-					case 16:
-					case 17:
-						d[i][j] = Math.sin(Math.pow(3 * (Math.cos(x[j]) - 1), Math.pow(3 * x[j], 3)));
+						a[i][j] = (pi+arctan(0.1*(x-3.5)/11))/3/4;
 						break;
 					default:
-						d[i][j] = Math.pow(Math.E, Math.pow(Math.E, 4 * ((1 / 2) + x[j])));
+						a[i][j] = arctan(cos(x))*(((sin(x)/(1-(0.5+x)/2/3))^2)^(1/4*(sin((2*x)^2)+0.5))+1/2);
 						break;
 				}
-				System.out.printf("%.3f ", d[i][j]);
+				System.out.printf("%.4f ", a[i][j]);
 			}
 			System.out.println();
 		}

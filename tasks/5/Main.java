@@ -6,27 +6,24 @@ public class Main {
 		for (int i = 0; i < x.length; i++)
 			x[i] = Math.random() * 15.0 - 13.0;
 				
-		double[][] d = new double[14][20];
-		for (int i = 0; i < d.length; i++) {
-			for (int j = 0; j < d[i].length; j++) {
-				switch ((int) b[i]) {
-					case 7:
-						d[i][j] = Math.asin(Math.pow(Math.E, Math.cbrt(- Math.pow(Math.sin(x[j]), 2))));
+		double[][] a = new double[9][16];
+		for (int i = 0; i < a.length; i++) {
+			for (int j = 0; j < a[i].length; j++) {
+				switch (b[i]) {
+					case 12:
+						a[i][j] = arctan(((x-5.5)/15)^2)/2;
 						break;
-					case 5:
-					case 6:
-					case 8:
-					case 9:
-					case 15:
 					case 16:
-					case 17:
-						d[i][j] = Math.sin(Math.pow(3 * (Math.cos(x[j]) - 1), Math.pow(3 * x[j], 3)));
+					case 18:
+					case 20:
+					case 22:
+						a[i][j] = (2*e^(root(3)(x)))^2;
 						break;
 					default:
-						d[i][j] = Math.pow(Math.E, Math.pow(Math.E, 4 * ((1 / 2) + x[j])));
+						a[i][j] = root(3)(e^(arctan(1/4*(x-5.5)/15)));
 						break;
 				}
-				System.out.printf("%.3f ", d[i][j]);
+				System.out.printf("%.2f ", a[i][j]);
 			}
 			System.out.println();
 		}
