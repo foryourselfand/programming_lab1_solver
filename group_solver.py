@@ -1,19 +1,21 @@
 from task_inputs import TaskInputsCreator
 from variant_getter import VariantGetter
 from writer import TaskWriter
-from sys import argv
+from group_numbers_reader import GroupNumbersReader
 
 
 def main():
-    variant = int(argv[1]) if len(argv) == 2 else 698
-
     variant_getter = VariantGetter()
 
     task_inputs_creator = TaskInputsCreator(variant_getter)
-    input_tasks = task_inputs_creator.get_task_inputs(variant)
 
+    group_numbers_reader = GroupNumbersReader()
+    variants = group_numbers_reader.get_variant_by_last(3)
     task_writer = TaskWriter()
-    task_writer.write_task(input_tasks, variant)
+
+    for new_variant in variants:
+        input_tasks = task_inputs_creator.get_task_inputs(new_variant)
+        task_writer.write_task(input_tasks, new_variant)
 
     variant_getter.dump_remembered_variants()
 
