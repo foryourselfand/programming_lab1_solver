@@ -288,7 +288,7 @@ class ThirdTaskFormatter(AbstractTaskFormatter):
 
 
 def main():
-    variant = 6
+    variant = 698
 
     variant_getter = VariantGetter()
 
