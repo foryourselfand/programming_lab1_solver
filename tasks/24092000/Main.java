@@ -9,9 +9,9 @@ public class Main {
 		double[][] e = new double[17][10];
 		for (int i = 0; i < e.length; i++) {
 			for (int j = 0; j < e[i].length; j++) {
-				switch (f[i]) {
+				switch ((int) f[i]) {
 					case 12:
-						e[i][j] = tan(ln(sin^2(x)));
+						e[i][j] = Math.tan(Math.log(Math.pow(Math.sin(x[j]), 2)));
 						break;
 					case 2:
 					case 3:
@@ -21,10 +21,10 @@ public class Main {
 					case 8:
 					case 13:
 					case 15:
-						e[i][j] = (2*(ln(abs(x)))^(root(3)(x)))^(ln(sin^2(x)));
+						e[i][j] = Math.pow((2*Math.pow((Math.log(Math.abs(x[j]))), (Math.cbrt(x[j])))), (Math.log(Math.pow(Math.sin(x[j]), 2))));
 						break;
 					default:
-						e[i][j] = (pi*(cos(x))^(tan(x)+1))^(3/(tan(x/(x+4))-2/3));
+						e[i][j] = Math.pow((Math.PI*Math.pow((Math.cos(x[j])), (Math.tan(x[j])+1))), (3/(Math.tan(x[j]/(x[j]+4))-2/3)));
 						break;
 				}
 				System.out.printf("%.3f ", e[i][j]);

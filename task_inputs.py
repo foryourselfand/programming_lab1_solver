@@ -11,8 +11,6 @@ class TaskInputsCreator:
 
     def get_task_inputs(self, variant: int = 698):
         soup: BeautifulSoup = self.variant_getter.get_variant_soup(variant)
-        # print(soup.prettify())
-        # print('_' * 100)
 
         self.last_element = soup
         first_text = self.get_text_from_last_element()

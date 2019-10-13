@@ -9,18 +9,18 @@ public class Main {
 		double[][] a = new double[9][16];
 		for (int i = 0; i < a.length; i++) {
 			for (int j = 0; j < a[i].length; j++) {
-				switch (b[i]) {
+				switch ((int) b[i]) {
 					case 12:
-						a[i][j] = arctan(((x-5.5)/15)^2)/2;
+						a[i][j] = Math.atan(Math.pow(((x[j]-5.5)/15), 2))/2;
 						break;
 					case 16:
 					case 18:
 					case 20:
 					case 22:
-						a[i][j] = (2*e^(root(3)(x)))^2;
+						a[i][j] = Math.pow((Math.pow(2*Math.E, (Math.cbrt(x[j])))), 2);
 						break;
 					default:
-						a[i][j] = root(3)(e^(arctan(1/4*(x-5.5)/15)));
+						a[i][j] = Math.cbrt(Math.pow(Math.E, (Math.atan(1/4*(x[j]-5.5)/15))));
 						break;
 				}
 				System.out.printf("%.2f ", a[i][j]);

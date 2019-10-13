@@ -9,9 +9,9 @@ public class Main {
 		double[][] n = new double[12][13];
 		for (int i = 0; i < n.length; i++) {
 			for (int j = 0; j < n[i].length; j++) {
-				switch (h[i]) {
+				switch ((int) h[i]) {
 					case 17:
-						n[i][j] = ln(sin^2((1/3/(3/4+x)/x)^2));
+						n[i][j] = Math.log(Math.pow(Math.sin(Math.pow((1/3/(3/4+x[j])/x[j]), 2)), 2));
 						break;
 					case 5:
 					case 7:
@@ -19,10 +19,10 @@ public class Main {
 					case 11:
 					case 21:
 					case 25:
-						n[i][j] = (0.5*(root(3)(e^(x))+2/3))^(tan(1/4/(2/3-x)));
+						n[i][j] = Math.pow((0.5*(Math.cbrt(Math.pow(Math.E, (x[j])))+2/3)), (Math.tan(1/4/(2/3-x[j]))));
 						break;
 					default:
-						n[i][j] = ((1/4+e^(((x)^(1/4/x)-2)^3))/4)^(tan((tan(x)*(1-arcsin((x+3)/22)))^(ln(abs(x)))));
+						n[i][j] = Math.pow(((Math.pow(1/4+Math.E, (Math.pow((Math.pow((x[j]), (1/4/x[j]))-2), 3))))/4), (Math.tan(Math.pow((Math.tan(x[j])*(1-Math.asin((x[j]+3)/22))), (Math.log(Math.abs(x[j])))))));
 						break;
 				}
 				System.out.printf("%.2f ", n[i][j]);

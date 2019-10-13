@@ -9,9 +9,9 @@ public class Main {
 		double[][] l = new double[12][15];
 		for (int i = 0; i < l.length; i++) {
 			for (int j = 0; j < l[i].length; j++) {
-				switch (f[i]) {
+				switch ((int) f[i]) {
 					case 19:
-						l[i][j] = (arctan(0.2*(x+1)/14))^(0.25/(arcsin(e^(-abs(x)))-1));
+						l[i][j] = Math.pow((Math.atan(0.2*(x[j]+1)/14)), (0.25/(Math.asin(Math.pow(Math.E, (-Math.abs(x[j]))))-1)));
 						break;
 					case 5:
 					case 9:
@@ -19,10 +19,10 @@ public class Main {
 					case 13:
 					case 17:
 					case 23:
-						l[i][j] = cos(cos(root(3)(x)));
+						l[i][j] = Math.cos(Math.cos(Math.cbrt(x[j])));
 						break;
 					default:
-						l[i][j] = (0.25-(root(3)((x)^(x-3/4)))^(3+cos(root(3)(x))))^(arcsin(e^(root(3)(-(4/abs(x))^(x)))));
+						l[i][j] = Math.pow((0.25-Math.pow((Math.cbrt(Math.pow((x[j]), (x[j]-3/4)))), (3+Math.cos(Math.cbrt(x[j]))))), (Math.asin(Math.pow(Math.E, (Math.cbrt(-Math.pow((4/Math.abs(x[j])), (x[j]))))))));
 						break;
 				}
 				System.out.printf("%.4f ", l[i][j]);

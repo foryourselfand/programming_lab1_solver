@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import List, Union
 
 
-class TabFormatter(object):
+class TabFormatter():
     def __init__(self, header):
         self.elems: List[Union[str, TabFormatter]] = list()
 
