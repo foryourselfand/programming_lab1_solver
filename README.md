@@ -1,6 +1,16 @@
 # Programming Lab1 Solver
 
-# WARNING
+## Task
+Write a mathematical expression processing program using Java programming language (expressions are different for different task variants). Program should satisfy these requirements:
+
+1. It should be packaged into executable jar archive.
+2. Expression should be processed in coordination with mathematical equation rules (operations order etc.).
+3. Program must use math functions from Java standard library (java.lang.math package).
+4. Program should use standard output to display expression processing result.
+
+Program demonstration should be performed using helios server.
+
+## WARNING
 It's not ready: ```1/2``` instead ```1.0 / 2.0``` or ```(double) (1 / 2)```
 
 Also: if you variant not in remembered variants, update ```info/config.txt```
